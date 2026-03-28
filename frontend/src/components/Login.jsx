@@ -1,59 +1,88 @@
-
 import { useState } from "react";
-import api from "../services/Api";
-import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import toast from "react-hot-toast";
+
+import { useAuth } from "../context/AuthContext";
+import api from "../services/Api";
+
+import Input from "./ui/Input";
+import Button from "./ui/Button";
+import Card from "./ui/Card";
+import Title from "./ui/Title";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({});
   const { setUser } = useAuth();
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const validate = () => {
+    const err = {};
+
+    if (!emailRegex.test(form.email)) {
+      err.email = "Invalid email";
+    }
+
+    if (form.password.length < 6) {
+      err.password = "Min 6 characters required";
+    }
+
+    return err;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const res = await axios.post("/auth/login", form);
+    const err = validate();
+    if (Object.keys(err).length > 0) {
+      setErrors(err);
+      return;
+    }
 
+    try {
+      const res = await api.post("/auth/login", form);
       setUser(res.data.user);
+
+      toast.success("Login successful 🚀");
       navigate("/dashboard");
     } catch (err) {
-      alert(err.response?.data?.message || "Login failed");
+      toast.error(err.response?.data?.message || "Login failed");
     }
   };
 
+  const isValid =
+    emailRegex.test(form.email) && form.password.length >= 6;
+
   return (
-    <div className="flex h-screen justify-center items-center">
-      <form onSubmit={handleSubmit} className="p-6 shadow-md rounded">
-        <h2 className="text-xl mb-4">Login</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-800">
+      <Card>
+        <Title>Login</Title>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          className="block mb-3 p-2 border"
-          required
-        />
+        <form onSubmit={handleSubmit}>
+          <Input
+            label="Email"
+            name="email"
+            onChange={(e) =>
+              setForm({ ...form, email: e.target.value })
+            }
+            error={errors.email}
+          />
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          className="block mb-3 p-2 border"
-          required
-        />
+          <Input
+            label="Password"
+            type="password"
+            name="password"
+            onChange={(e) =>
+              setForm({ ...form, password: e.target.value })
+            }
+            error={errors.password}
+          />
 
-        <button className="bg-blue-500 text-white px-4 py-2">
-          Login
-        </button>
-      </form>
+          <Button disabled={!isValid}>Login</Button>
+        </form>
+      </Card>
     </div>
   );
 };

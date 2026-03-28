@@ -1,21 +1,20 @@
 import { useAuth } from "../context/AuthContext";
+import Button from "./ui/Button";
 
 const Dashboard = () => {
-  const { user } = useAuth();
-
-  const dummyData = ["Leads", "Tasks", "Users"];
+  const { user, setUser } = useAuth();
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl">Welcome, {user?.name}</h1>
+    <div className="min-h-screen bg-gray-800 p-6 text-white">
+      <div className="flex justify-between">
+        <h1>Welcome, {user?.name}</h1>
 
-      <ul className="mt-4">
-        {dummyData.map((item, index) => (
-          <li key={index} className="p-2 border mb-2">
-            {item}
-          </li>
-        ))}
-      </ul>
+        <div className="w-32">
+          <Button onClick={() => setUser(null)}>
+            Logout
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
