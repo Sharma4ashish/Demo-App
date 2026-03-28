@@ -71,6 +71,11 @@ const loginController = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
+    res.cookie("token", generateToken(user._id), {
+      httpOnly: true,
+      secure: true,
+    });
+
     res.json({
       message: 'Login successful',
       token: generateToken(user._id),
@@ -87,7 +92,29 @@ const loginController = async (req, res) => {
 };
 
 
+
+
+
+const getMe = async (req, res) => {
+  const user = await User.findById(req.user.id).select("-password");
+
+  res.json(user);
+};
+
+
+
+const logoutController = (req, res) => {
+  res.clearCookie("token");
+  res.json({ message: "Logged out successfully" });
+};
+
+
+
+
+
 module.exports = {
   registerController,
-  loginController
+  loginController,
+  getMe,
+  logoutController
 };

@@ -1,19 +1,25 @@
-const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
+const express = require("express");
+const cors = require("cors");
+require("dotenv").config();
 
-const connectDB = require('./src/confiq/db');
-const authRoutes = require('./src/routes/user');
+const connectDB = require("./src/confiq/db");
+const authRoutes = require("./src/routes/user");
 
 const app = express();
 
-app.use(cors());
+console.log(process.env.CLIENT_URL);
+
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 connectDB();
 
-
-app.use('/api/user', authRoutes);
+app.use("/api/user", authRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
