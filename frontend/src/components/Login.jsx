@@ -57,7 +57,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-800">
-      <Card>
+      <Card className="max-w-md mx-auto" >
         <Title>Login</Title>
 
         <form onSubmit={handleSubmit}>
