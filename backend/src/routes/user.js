@@ -8,5 +8,10 @@ router.post('/register', registerController);
 router.post('/login', loginController);
 router.get('/me',requireAuth, getMe);
 router.get('/logout',requireAuth, logoutController);
+router.get('/healthy',(req, res)=>{
+    res.json({
+        message:"Server Healthy"
+    })
+});
 
 module.exports = router;
