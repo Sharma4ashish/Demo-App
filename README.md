@@ -107,7 +107,7 @@ npm run dev
 ![Active Button](./docs/Login-Active-Button_after_input.png)
 
 ### 📊 Dashboard
-![Dashboard](./docs/dashboard.png)
+![Dashboard](./docs/Dashboard.png)
 
 
 ```
