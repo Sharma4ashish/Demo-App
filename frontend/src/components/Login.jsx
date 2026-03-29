@@ -11,38 +11,37 @@ import Card from "./ui/Card";
 import Title from "./ui/Title";
 
 const Login = () => {
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [errors, setErrors] = useState({});
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  
   const { setUser } = useAuth();
   const navigate = useNavigate();
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const validate = () => {
-    const err = {};
-
-    if (!emailRegex.test(form.email)) {
-      err.email = "Invalid email";
-    }
-
-    if (form.password.length < 6) {
-      err.password = "Min 6 characters required";
-    }
-
-    return err;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const err = validate();
-    if (Object.keys(err).length > 0) {
-      setErrors(err);
-      return;
+    if (!emailRegex.test(email)) {
+      return toast.error("Invalid email");
+    }
+
+    if (password.length < 6) {
+      return toast.error("Password must be at least 6 characters");
     }
 
     try {
-      const res = await api.post("/auth/login", form);
+      const res = await api.post("/user/login", {
+        email,
+        password,
+      });
+      console.log("Loginnnnnnn " ,res.data.token);
+      
+
+      localStorage.setItem("token", res.data.token);
+      console.log(       localStorage.getItem("token"));
+
+
       setUser(res.data.user);
 
       toast.success("Login successful 🚀");
@@ -52,35 +51,28 @@ const Login = () => {
     }
   };
 
-  const isValid =
-    emailRegex.test(form.email) && form.password.length >= 6;
+  const isFilled = email.length > 0 || password.length > 0;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-800">
-      <Card className="max-w-md mx-auto" >
+      <Card className="max-w-md mx-auto">
         <Title>Login</Title>
 
         <form onSubmit={handleSubmit}>
           <Input
             label="Email"
-            name="email"
-            onChange={(e) =>
-              setForm({ ...form, email: e.target.value })
-            }
-            error={errors.email}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <Input
             label="Password"
             type="password"
-            name="password"
-            onChange={(e) =>
-              setForm({ ...form, password: e.target.value })
-            }
-            error={errors.password}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
-          <Button disabled={!isValid}>Login</Button>
+          <Button disabled={!isFilled}>Login</Button>
         </form>
       </Card>
     </div>

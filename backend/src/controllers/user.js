@@ -111,13 +111,14 @@ const loginController = async (req, res) => {
 
     const token = generateToken(user._id);
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-    });
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   secure:false
+    // });
 
     res.json({
       message: "Login successful",
+      token,
       user: {
         id: user._id,
         name: user.name,
@@ -135,9 +136,27 @@ const loginController = async (req, res) => {
 
 
 const getMe = async (req, res) => {
-  const user = await User.findById(req.user.id).select("-password");
+  try {
+    const user = await User.findById(req.user.id).select("-password");
 
-  res.json(user);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    return res.json({
+      success: true,
+      data :user
+    });
+
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
 };
 
 
