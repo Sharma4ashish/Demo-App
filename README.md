@@ -64,7 +64,7 @@ server/
 ### 1️⃣ Clone the repository
 
 ```
-git clone <your-repo-url>
+git clone https://github.com/Sharma4ashish/Demo-App
 cd project-folder
 ```
 
@@ -77,17 +77,6 @@ cd backend
 npm install
 ```
 alredy have my env details 
-Create a `.env` file in the server folder:
-
-```
-PORT=5000
-MONGO_URI=your_mongodb_connection
-JWT_SECRET=your_secret_key
-```
-
-Run backend:
-
-```
 npm run dev
 ```
 
@@ -100,6 +89,14 @@ cd frontend
 npm install
 npm run dev
 ```
+
+
+
+![Login](./docs/Login.png)
+![Login Invalid inpups](./docs/invalid-Validation.png)
+![Login Password Validation](./docs/password-Validation.png)
+![Login Active after input](./docs/Login-Active-Button_after_input.png)
+![Login](./docs/Dashboard.png)
 
 ---
 
