@@ -7,6 +7,10 @@ It demonstrates authentication, protected routes, and a basic dashboard UI.
 
 ---
 
+Credentials
+email : ashish@test.com
+password: 123456
+
 ## 🛠️ Tech Stack
 
 ### Frontend
