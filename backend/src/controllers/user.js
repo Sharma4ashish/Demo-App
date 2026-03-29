@@ -3,9 +3,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const passwordRegex = /^.{6,}$/; 
+const passwordRegex = /^.{6,}$/;
 
-// regex for min 6 dig pass
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -16,7 +15,6 @@ const registerController = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // 🔹 Basic field validation
     if (!name || !email || !password) {
       return res.status(400).json({
         success: false,
@@ -24,7 +22,6 @@ const registerController = async (req, res) => {
       });
     }
 
-    // 🔹 Email validation
     if (!emailRegex.test(email)) {
       return res.status(400).json({
         success: false,
@@ -32,7 +29,6 @@ const registerController = async (req, res) => {
       });
     }
 
-    // 🔹 Password validation
     if (!passwordRegex.test(password)) {
       return res.status(400).json({
         success: false,
@@ -40,7 +36,6 @@ const registerController = async (req, res) => {
       });
     }
 
-    // 🔹 Check existing user
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
@@ -50,17 +45,14 @@ const registerController = async (req, res) => {
       });
     }
 
-    // 🔹 Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 🔹 Create user
     const user = await User.create({
       name,
       email,
       password: hashedPassword
     });
 
-    // 🔹 Success response
     return res.status(201).json({
       success: true,
       message: "User registered successfully",
@@ -92,6 +84,21 @@ const loginController = async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
+
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email format"
+      });
+    }
+
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 6 characters"
+      });
+    }
+
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
@@ -102,14 +109,15 @@ const loginController = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    res.cookie("token", generateToken(user._id), {
+    const token = generateToken(user._id);
+
+    res.cookie("token", token, {
       httpOnly: true,
       secure: true,
     });
 
     res.json({
-      message: 'Login successful',
-      token: generateToken(user._id),
+      message: "Login successful",
       user: {
         id: user._id,
         name: user.name,

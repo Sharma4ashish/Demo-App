@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     min:[6,"Min 6 digit Required"]
   }
-});
+},{timestamps:true});
 
 const User = mongoose.model('User', userSchema);
 
