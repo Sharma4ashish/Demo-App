@@ -146,4 +146,4 @@ Full Stack Developer (Node.js + React)
 ![Active Button](./docs/Login-Active-Button_after_input.png)
 
 ### 📊 Dashboard
-![Dashboard](./docs/Dashboard.png)
+![Dashboard](./docs/dashboard.png)
