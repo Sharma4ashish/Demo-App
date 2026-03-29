@@ -90,13 +90,23 @@ npm install
 npm run dev
 ```
 
+## 📸 Screenshots
 
-
+### 🔐 Login Page
 ![Login](./docs/Login.png)
-![Login Invalid inpups](./docs/invalid-Validation.png)
-![Login Password Validation](./docs/password-Validation.png)
-![Login Active after input](./docs/Login-Active-Button_after_input.png)
-![Login](./docs/Dashboard.png)
+
+### ❌ Invalid Input Validation
+![Invalid Inputs](./docs/invalid-Validation.png)
+
+### 🔒 Password Validation
+![Password Validation](./docs/password-Validation.png)
+
+### ✅ Active Button After Input
+![Active Button](./docs/Login-Active-Button_after_input.png)
+
+
+### 📊 Dashboard
+![Dashboard](./docs/Dashboard.png)
 
 ---
 
